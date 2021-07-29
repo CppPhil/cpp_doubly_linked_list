@@ -124,8 +124,8 @@ TEST_CASE(shouldBeAbleToCopyConstructAList)
 
   for (std::size_t i{0}; i < l1.size(); ++i) { ASSERT_EQ(l1[i], l2[i]); }
 
-  List<int>::const_iterator it1{l1.begin()};
-  List<int>::const_iterator it2{l2.begin()};
+  const List<int>::const_iterator it1{l1.begin()};
+  const List<int>::const_iterator it2{l2.begin()};
 
   while (it1 != l1.end()) {
     ASSERT_EQ(*it1, *it2);

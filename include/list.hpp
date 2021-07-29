@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
+#include <stdexcept>
+#include <string>
 
 extern std::unordered_set<void*> newed;
 extern std::unordered_set<void*> deleted;
@@ -45,7 +47,7 @@ public:
       return !(lhs == rhs);
     }
 
-    value_type& operator*() { return m_node->value; }
+    value_type& operator*() const { return m_node->value; }
 
     iterator& operator++()
     {
@@ -164,6 +166,28 @@ public:
   reference back() { return *rbegin(); }
 
   const_reference back() const { return const_cast<this_type*>(this)->back(); }
+
+  reference operator[](size_type index)
+  {
+    if (index >= size()) {
+      std::string errorMessage{"List::operator[]: index out of bounds: "};
+      errorMessage += std::to_string(index);
+      errorMessage += " is >= size() (";
+      errorMessage += std::to_string(size());
+      errorMessage += ")!";
+
+      throw std::out_of_range{errorMessage};
+    }
+
+    iterator it{begin()};
+    std::advance(it, index);
+    return *it;
+  }
+
+  const_reference operator[](size_type index) const
+  {
+    return const_cast<this_type*>(this)->operator[](index);
+  }
 
   iterator begin() { return iterator{m_begin}; }
 
