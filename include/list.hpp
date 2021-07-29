@@ -6,7 +6,7 @@
 #include <iterator>
 
 // TODO: Check for memory leaks
-// TODO: Make it be more like std::list
+// TODO: Write tests.
 
 // TODO: Implement simplifications.
 template<typename Ty>
@@ -54,7 +54,7 @@ public:
     iterator operator++(int)
     {
       iterator it{*this};
-      this->   operator++();
+      ++(*this);
       return it;
     }
 
@@ -67,7 +67,7 @@ public:
     iterator operator--(int)
     {
       iterator it{*this};
-      this->   operator--();
+      --(*this);
       return it;
     }
 
@@ -102,7 +102,7 @@ public:
     const_iterator operator++(int)
     {
       const_iterator it{*this};
-      this->         operator++();
+      ++(*this);
       return it;
     }
 
@@ -115,7 +115,7 @@ public:
     const_iterator operator--(int)
     {
       const_iterator it{*this};
-      this->         operator--();
+      --(*this);
       return it;
     }
 
@@ -192,6 +192,21 @@ public:
   }
 
   const_reverse_iterator crend() const { return rend(); }
+
+  void sort() { sort(std::less<value_type>{}); }
+
+  template<typename BinaryComparator>
+  void sort(BinaryComparator binaryComparator)
+  {
+    for (Node* node{m_begin}; node->next != nullptr; node = node->next) {
+      for (Node* next{node->next}; next != nullptr; next = next->next) {
+        if (std::invoke(binaryComparator, next->value, node->value)) {
+          using std::swap;
+          swap(node->value, next->value);
+        }
+      }
+    }
+  }
 
   void push_back(const_reference element)
   {
