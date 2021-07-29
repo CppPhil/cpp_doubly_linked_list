@@ -17,10 +17,8 @@ std::unordered_set<void*> newed{};
 std::unordered_set<void*> deleted{};
 
 #ifdef _MSC_VER
-#define NEVER_INLINE __declspec(noinline)
 #define FUNCTION __FUNCSIG__
 #else
-#define NEVER_INLINE __attribute__((noinline))
 #define FUNCTION __PRETTY_FUNCTION__
 #endif
 
@@ -100,16 +98,16 @@ struct TestFunctionWithName {
 std::vector<TestFunctionWithName> testFunctions{};
 
 #define TEST(testName)                                                     \
-  NEVER_INLINE void testName();                                            \
+  void testName();                                                         \
   struct testName##Struct {                                                \
     testName##Struct()                                                     \
     {                                                                      \
       testFunctions.push_back(TestFunctionWithName{&testName, #testName}); \
     }                                                                      \
   } testName##StructInstance{};                                            \
-  NEVER_INLINE void testName()
+  void testName()
 
-NEVER_INLINE List<int> makeTestList()
+List<int> makeTestList()
 {
   List<int> list{};
 
