@@ -17,7 +17,6 @@ extern std::unordered_set<void*> deleted;
 // TODO: Check for memory leaks
 // TODO: Write tests.
 
-// TODO: Check all iterator and iteration functionality.
 // TODO: Test comparison operators.
 
 template<typename Ty>
