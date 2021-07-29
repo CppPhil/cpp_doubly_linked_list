@@ -445,12 +445,15 @@ TEST_CASE(shouldBeAbleToRemoveElements)
 TEST_CASE(shouldBeAbleToRemoveElementsByPredicate)
 {
   List<std::string> l{
-    "test", "text", "long string",
-    "hi", "lorem ipsum", "more text here", "testing", "abc"
-  };
-  l.remove_if([](const std::string& s) {
-    return s.size() > 4;
-  });
+    "test",
+    "text",
+    "long string",
+    "hi",
+    "lorem ipsum",
+    "more text here",
+    "testing",
+    "abc"};
+  l.remove_if([](const std::string& s) { return s.size() > 4; });
   ASSERT_EQ(4, l.size());
   ASSERT_EQ((List<std::string>{"test", "text", "hi", "abc"}), l);
 }
