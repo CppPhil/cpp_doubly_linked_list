@@ -1,6 +1,8 @@
 #pragma once
 #include <cstddef>
 
+#include <iterator>
+
 // TODO: Check for memory leaks
 // TODO: Make it be more like std::list
 template<typename Ty>
@@ -113,6 +115,9 @@ public:
     iterator m_it;
   };
 
+  using reverse_iterator       = std::reverse_iterator<iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
   List() : m_begin{nullptr}, m_end{m_begin}, m_size{0}
   {
     try {
@@ -144,9 +149,31 @@ public:
 
   const_iterator begin() const { return const_cast<this_type*>(this)->begin(); }
 
+  const_iterator cbegin() const { return begin(); }
+
   iterator end() { return iterator{m_end}; }
 
   const_iterator end() const { return const_cast<this_type*>(this)->end(); }
+
+  const_iterator cend() const { return end(); }
+
+  reverse_iterator rbegin() { return reverse_iterator{end()}; }
+
+  const_reverse_iterator rbegin() const
+  {
+    return const_cast<this_type*>(this)->rbegin();
+  }
+
+  const_reverse_iterator crbegin() const { return rbegin(); }
+
+  reverse_iterator rend() { return reverse_iterator{begin()}; }
+
+  const_reverse_iterator rend() const
+  {
+    return const_cast<this_type*>(this)->rend();
+  }
+
+  const_reverse_iterator crend() const { return rend(); }
 
   void push_back(const_reference element)
   {
