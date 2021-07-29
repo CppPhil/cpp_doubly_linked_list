@@ -43,7 +43,6 @@ struct AssertionViolationException : std::logic_error {
   {
     std::ostringstream oss{};
     oss.imbue(std::locale::classic());
-    oss << std::boolalpha;
 
     oss << "AssertionViolationException:\n"
         << '"' << expression << "\" failed!\n"
@@ -51,8 +50,6 @@ struct AssertionViolationException : std::logic_error {
         << "Function : " << function << '\n'
         << "Expected : " << expected << '\n'
         << "Actual   : " << actual << "\n\n";
-
-    return oss.str();
   }
 };
 
@@ -61,7 +58,6 @@ std::string toString(const Ty& any)
 {
   std::ostringstream oss{};
   oss.imbue(std::locale::classic());
-  oss << std::boolalpha;
   oss << any;
   return oss.str();
 }
@@ -91,32 +87,26 @@ std::string toString(const Ty& any)
 using TestFunction = void (*)();
 std::vector<TestFunction> testFunctions{};
 
-#define TEST_CASE(testName)                                    \
-  NEVER_INLINE void testName();                                \
-  struct testName##Struct {                                    \
-    testName##Struct() { testFunctions.push_back(&testName); } \
-  } testName##StructInstance{};                                \
-  NEVER_INLINE void testName()
+#define TEST_CASE(testName)    \
+  NEVER_INLINE void testName() \
+  {                            \
+    testFunctions.push_back(&testName);
+
+#define TEST_CASE_END }
 
 TEST_CASE(shouldBeAbleToConstructEmptyList)
-{
-  List<int> l{};
-  ASSERT_EQ(true, l.empty());
-  ASSERT_EQ(0, l.size());
-}
+List<int> l{};
+ASSERT_EQ(true, l.empty());
+ASSERT_EQ(0, l.size());
+TEST_CASE_END
 
 int main()
 {
   try {
     for (TestFunction testFunction : testFunctions) { testFunction(); }
-
-    std::cout << ">>>>> TEST SUCCESS\n";
   }
   catch (const AssertionViolationException& ex) {
     std::cerr << ex.what();
-
-    std::cerr << "\n\n\n";
-    std::cerr << ">>>>>>> TEST FAILURE!!!! <<<<\n";
   }
 
   std::vector<void*> leaks{};

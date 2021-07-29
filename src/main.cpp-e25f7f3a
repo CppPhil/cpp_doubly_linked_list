@@ -61,7 +61,6 @@ std::string toString(const Ty& any)
 {
   std::ostringstream oss{};
   oss.imbue(std::locale::classic());
-  oss << std::boolalpha;
   oss << any;
   return oss.str();
 }
@@ -103,6 +102,8 @@ TEST_CASE(shouldBeAbleToConstructEmptyList)
   List<int> l{};
   ASSERT_EQ(true, l.empty());
   ASSERT_EQ(0, l.size());
+
+  ASSERT_EQ(false, true);
 }
 
 int main()
