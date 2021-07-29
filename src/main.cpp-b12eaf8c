@@ -475,9 +475,9 @@ TEST_CASE(shouldBeAbleToGrowFromAnEmptyListUsingResize)
   ASSERT_EQ(true, std::equal(l.begin(), l.end(), std::begin(a), std::end(a)));
 }
 
-TEST_CASE(shouldDoNothingWhenResizingToTheSameSize) 
+TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
 {
-  List<int> l{makeTestList()};
+  List<int>       l{makeTestList()};
   const List<int> copy{l};
   l.resize(10);
   ASSERT_EQ(10, l.size());
@@ -485,7 +485,7 @@ TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
   ASSERT_EQ(copy, l);
 }
 
-TEST_CASE(shouldBeAbleShrinkUsingResize) 
+TEST_CASE(shouldBeAbleShrinkUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(4);
@@ -496,7 +496,7 @@ TEST_CASE(shouldBeAbleShrinkUsingResize)
   ASSERT_EQ(3, l[3]);
 }
 
-TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize) 
+TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(0);
