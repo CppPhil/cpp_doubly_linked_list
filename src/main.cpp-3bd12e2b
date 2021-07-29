@@ -231,9 +231,7 @@ TEST_CASE(shouldBeAbleToAccessElementsByIndex)
 {
   const List<int> l{makeTestList()};
 
-  for (std::size_t i{0}; i < l.size(); ++i) {
-    ASSERT_EQ(i, l[i]);
-  }
+  for (std::size_t i{0}; i < l.size(); ++i) { ASSERT_EQ(i, l[i]); }
 }
 
 TEST_CASE(shouldThrowAnExceptionWhenIndexIsOutOfBounds)
@@ -243,15 +241,22 @@ TEST_CASE(shouldThrowAnExceptionWhenIndexIsOutOfBounds)
   try {
     l[-1];
     ASSERT_EQ(true, false);
-  } catch (const std::out_of_range& ex) {
-    ASSERT_EQ("List::operator[]: index out of bounds: " + std::to_string(SIZE_MAX) + " is >= size() (10)!", ex.what());
+  }
+  catch (const std::out_of_range& ex) {
+    ASSERT_EQ(
+      "List::operator[]: index out of bounds: " + std::to_string(SIZE_MAX)
+        + " is >= size() (10)!",
+      ex.what());
   }
 
   try {
     l[10];
     ASSERT_EQ(true, false);
-  } catch (const std::out_of_range& ex) {
-    ASSERT_EQ("List::operator[]: index out of bounds: 10 is >= size() (10)!"s, ex.what());
+  }
+  catch (const std::out_of_range& ex) {
+    ASSERT_EQ(
+      "List::operator[]: index out of bounds: 10 is >= size() (10)!"s,
+      ex.what());
   }
 }
 
