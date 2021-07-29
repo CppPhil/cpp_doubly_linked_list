@@ -341,7 +341,7 @@ TEST_CASE(shouldBeAbleToRemoveElementsFromTheBack)
   ASSERT_EQ(true, l2.empty());
 }
 
-TEST_CASE(shouldBeAbleToRemoveElementsFromTheFront) 
+TEST_CASE(shouldBeAbleToRemoveElementsFromTheFront)
 {
   List<int> l{makeTestList()};
   l.pop_front();

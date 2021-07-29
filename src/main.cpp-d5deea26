@@ -308,56 +308,6 @@ TEST_CASE(shouldBeAbleToAddElementsToTheBack)
   for (int i{0}; i < 20; ++i, ++it) { ASSERT_EQ(i, *it); }
 }
 
-TEST_CASE(shouldBeAbleToAddElementsToTheFront)
-{
-  List<int> l{};
-
-  for (int i{0}; i < 20; ++i) {
-    ASSERT_EQ(i, l.size());
-    l.push_front(i);
-    ASSERT_EQ(i + 1, l.size());
-    ASSERT_EQ(i, l.front());
-  }
-
-  List<int>::const_iterator it{l.begin()};
-
-  for (int i{0}; i < 20; ++i, ++it) { ASSERT_EQ(19 - i, *it); }
-}
-
-TEST_CASE(shouldBeAbleToRemoveElementsFromTheBack)
-{
-  List<int> l{makeTestList()};
-  l.pop_back();
-  ASSERT_EQ(9, l.size());
-  l.pop_back();
-  ASSERT_EQ(8, l.size());
-  ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7}), l);
-
-  List<int> l2{1};
-  ASSERT_EQ(1, l2.size());
-  l2.pop_back();
-  ASSERT_EQ(true, l2.empty());
-  l2.pop_back();
-  ASSERT_EQ(true, l2.empty());
-}
-
-TEST_CASE(shouldBeAbleToRemoveElementsFromTheFront) 
-{
-  List<int> l{makeTestList()};
-  l.pop_front();
-  ASSERT_EQ(9, l.size());
-  l.pop_front();
-  ASSERT_EQ(8, l.size());
-  ASSERT_EQ((List<int>{2, 3, 4, 5, 6, 7, 8, 9}), l);
-
-  List<int> l2{1};
-  ASSERT_EQ(1, l2.size());
-  l2.pop_front();
-  ASSERT_EQ(true, l2.empty());
-  l2.pop_front();
-  ASSERT_EQ(true, l2.empty());
-}
-
 int main()
 {
   try {
