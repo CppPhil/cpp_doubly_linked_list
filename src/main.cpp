@@ -703,7 +703,55 @@ TEST_CASE(shouldBeAbleToCompareListsForEquality)
 
 TEST_CASE(shouldBeAbleToCompareListsLexicographically)
 {
-  // TODO: HERE
+  // a shorter list should come before a larger one
+  {
+    List<int> l1{1, 2, 3};
+    List<int> l2{1, 2, 3, 4};
+    ASSERT_EQ(true, l1 < l2);
+  }
+
+  // less than test
+  {
+    List<int> l1{1, 2, 3, 3};
+    List<int> l2{1, 2, 3, 4};
+    ASSERT_EQ(true, l1 < l2);
+  }
+
+  // a longer list should be greater than a shorter list
+  {
+    List<int> l1{makeTestList()};
+    List<int> l2{0, 1, 2, 3, 4};
+    ASSERT_EQ(true, l1 > l2);
+  }
+
+  // greater than test
+  {
+    List<int> l1{1, 2, 5};
+    List<int> l2{1, 2, 4};
+    ASSERT_EQ(true, l1 > l2);
+  }
+
+  // <= with shorter list
+  {
+    List<int> l1{0, 1, 2, 3, 4};
+    List<int> l2{makeTestList()};
+    ASSERT_EQ(true, l1 <= l2);
+  }
+
+  // <= with lesser list
+  {
+    List<int> l1{1, 2, 3};
+    List<int> l2{1, 2, 4};
+    ASSERT_EQ(true, l1 <= l2);
+  }
+
+  // <= with equal list
+  {
+    List<int> l1{makeTestList()}, l2{l1};
+    ASSERT_EQ(true, l1 <= l2);
+  }
+
+  // TODO: Test >= operator.
 }
 
 int main(int argc, char* argv[])
