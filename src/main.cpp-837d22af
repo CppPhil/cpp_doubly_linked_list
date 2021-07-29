@@ -187,11 +187,12 @@ TEST_CASE(shouldBeAbleToGetFirstElement)
 TEST_CASE(shouldThrowWhenFrontIsCalledOnEmptyList)
 {
   const List<int> emptyList{};
-  
+
   try {
     emptyList.front();
     ASSERT_EQ(true, false);
-  } catch (const std::out_of_range& ex) {
+  }
+  catch (const std::out_of_range& ex) {
     using namespace std::string_literals;
     ASSERT_EQ("List::front called on empty list."s, ex.what());
   }

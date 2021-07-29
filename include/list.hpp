@@ -174,7 +174,14 @@ public:
 
   [[nodiscard]] bool empty() const { return size() == 0; }
 
-  reference front() { return *begin(); }
+  reference front()
+  {
+    if (empty()) {
+      throw std::out_of_range{"List::front called on empty list."};
+    }
+
+    return *begin();
+  }
 
   const_reference front() const
   {
