@@ -4,7 +4,9 @@
 
 #include <algorithm>
 #include <functional>
+#include <initializer_list>
 #include <iterator>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -15,7 +17,7 @@ extern std::unordered_set<void*> deleted;
 // TODO: Check for memory leaks
 // TODO: Write tests.
 
-// TODO: Check all iterator functionality.
+// TODO: Check all iterator and iteration functionality.
 // TODO: Test comparison operators.
 
 template<typename Ty>
@@ -148,10 +150,55 @@ public:
   using reverse_iterator       = std::reverse_iterator<iterator>;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-  friend auto operator<=>(const this_type& lhs, const this_type& rhs)
+  friend std::ostream& operator<<(std::ostream& os, const this_type& list)
   {
-    return std::lexicographical_compare_three_way(
+    if (list.empty()) { os << "List[]"; }
+
+    os << "List[";
+
+    const_iterator it{list.begin()};
+    const_iterator end{list.end()};
+    const_iterator lastElemIt{std::prev(end)};
+
+    while (it != lastElemIt) {
+      os << *it << ", ";
+      ++it;
+    }
+
+    os << *lastElemIt;
+    os << ']';
+    return os;
+  }
+
+  friend bool operator==(const this_type& lhs, const this_type& rhs)
+  {
+    return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+  }
+
+  friend bool operator!=(const this_type& lhs, const this_type& rhs)
+  {
+    return !(lhs == rhs);
+  }
+
+  friend bool operator<(const this_type& lhs, const this_type& rhs)
+  {
+    return std::lexicographical_compare(
       lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+  }
+
+  friend bool operator>(const this_type& lhs, const this_type& rhs)
+  {
+    return rhs < lhs;
+  }
+
+  friend bool operator<=(const this_type& lhs, const this_type& rhs)
+  {
+    return !(lhs > rhs);
+  }
+
+  friend bool operator>=(const this_type& lhs, const this_type& rhs)
+  {
+    return !(lhs < rhs);
   }
 
   List() : m_begin{nullptr}, m_end{nullptr}, m_size{0} { initialize(); }
@@ -159,6 +206,11 @@ public:
   List(const this_type& other) : List{}
   {
     for (const value_type& element : other) { push_back(element); }
+  }
+
+  List(std::initializer_list<value_type> initList) : List{}
+  {
+    for (const value_type& elementToAdd : initList) { push_back(elementToAdd); }
   }
 
   this_type& operator=(const this_type& other)
@@ -256,8 +308,8 @@ public:
   template<typename BinaryComparator>
   void sort(BinaryComparator binaryComparator)
   {
-    for (Node* node{m_begin}; node->next != nullptr; node = node->next) {
-      for (Node* next{node->next}; next != nullptr; next = next->next) {
+    for (Node* node{m_begin}; node->next != m_end; node = node->next) {
+      for (Node* next{node->next}; next != m_end; next = next->next) {
         if (std::invoke(binaryComparator, next->value, node->value)) {
           using std::swap;
           swap(node->value, next->value);

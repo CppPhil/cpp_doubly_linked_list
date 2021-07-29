@@ -287,7 +287,7 @@ TEST_CASE(shouldBeAbleToSort)
 TEST_CASE(shouldBeAbleToSortInDescendingOrder)
 {
   List<int>       l{1, 2, 3, 7, 9, 1, 4, 8, 1, 2, -1};
-  const List<int> expected{9, 8, 7, 4, 3, 2, 2, 1, 1, 1, -1};
+  const List<int> expected{-1, 1, 1, 1, 2, 2, 3, 4, 7, 8, 9};
   l.sort(std::greater<int>{});
   ASSERT_EQ(expected, l);
 }
