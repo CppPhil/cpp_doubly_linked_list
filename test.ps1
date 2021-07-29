@@ -19,7 +19,8 @@ Set-Location $build_dir
 Write-Output ""
 Write-Output ""
 Write-Output ""
-Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Starting debug test run"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Starting debug test run >>> $time_string"
 
 Set-Location Debug
 
@@ -31,7 +32,8 @@ if (-Not ($LASTEXITCODE -eq "0")) {
   exit 1
 }
 
-Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Completed debug test run"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Completed debug test run >>> $time_string"
 Write-Output ""
 Write-Output ""
 Write-Output ""
@@ -43,7 +45,8 @@ Set-Location $build_dir
 Write-Output ""
 Write-Output ""
 Write-Output ""
-Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Starting release test run"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Starting release test run >>> $time_string"
 
 Set-Location Release
 
@@ -55,7 +58,8 @@ if (-Not ($LASTEXITCODE -eq "0")) {
   exit 1
 }
 
-Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Completed release test run"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output ">>>>>>>>>>>>>>>>>>>>>>> Completed release test run >>> $time_string"
 Write-Output ""
 Write-Output ""
 Write-Output ""

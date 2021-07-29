@@ -6,13 +6,14 @@ if (-Not (Test-Path -Path $build_dir)) {
   mkdir $build_dir
 }
 
-.\format.ps1 | Wait-Process
+.\format.ps1
 
 Set-Location $build_dir
 
 Write-Output ""
 Write-Output ""
-Write-Output "~~~~~~~~~~~~ Starting debug build ~~~~~~~~~~~~"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output "~~~~~~~~~~~~ Starting debug build ~~~~~~~~~~~~ $time_string"
 Write-Output ""
 
 if ($IsLinux) {
@@ -32,7 +33,8 @@ if (-Not ($LASTEXITCODE -eq "0")) {
 }
 
 Write-Output ""
-Write-Output "~~~~~~~~~~~~ Completed debug build ~~~~~~~~~~~~"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output "~~~~~~~~~~~~ Completed debug build ~~~~~~~~~~~~ $time_string"
 Write-Output ""
 Write-Output ""
 
@@ -42,7 +44,8 @@ Set-Location $build_dir
 
 Write-Output ""
 Write-Output ""
-Write-Output "~~~~~~~~~~~~ Starting release build ~~~~~~~~~~~~"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output "~~~~~~~~~~~~ Starting release build ~~~~~~~~~~~~ $time_string"
 Write-Output ""
 
 if ($IsLinux) {
@@ -62,7 +65,8 @@ if (-Not ($LASTEXITCODE -eq "0")) {
 }
 
 Write-Output ""
-Write-Output "~~~~~~~~~~~~ Completed release build ~~~~~~~~~~~~"
+$time_string = Get-Date -Format "HH:mm:ss" | Out-String
+Write-Output "~~~~~~~~~~~~ Completed release build ~~~~~~~~~~~~ $time_string"
 Write-Output ""
 Write-Output ""
 
