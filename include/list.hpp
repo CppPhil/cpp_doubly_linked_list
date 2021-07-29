@@ -163,7 +163,7 @@ public:
 
   friend std::ostream& operator<<(std::ostream& os, const this_type& list)
   {
-    if (list.empty()) { os << "List[]"; }
+    if (list.empty()) { return os << "List[]"; }
 
     os << "List[";
 

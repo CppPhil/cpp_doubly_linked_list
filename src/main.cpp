@@ -671,6 +671,11 @@ TEST_CASE(shouldBeAbleToPrintAList)
   oss << l;
   const std::string actual{oss.str()};
   ASSERT_EQ("List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"s, actual);
+
+  const List<int>    empty{};
+  std::ostringstream oss2{};
+  oss2 << empty;
+  ASSERT_EQ("List[]", oss2.str());
 }
 
 TEST_CASE(shouldBeAbleToCompareListsForEquality)
