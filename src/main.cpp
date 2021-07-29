@@ -673,6 +673,39 @@ TEST_CASE(shouldBeAbleToPrintAList)
   ASSERT_EQ("List[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]"s, actual);
 }
 
+TEST_CASE(shouldBeAbleToCompareListsForEquality)
+{
+  const List<int> l1{makeTestList()};
+  const List<int> l2{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  const List<int> l3{1, 2, 3};
+  const List<int> l4{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+  ASSERT_EQ(l1, l1);
+  ASSERT_EQ(l1, l2);
+  ASSERT_NE(l1, l3);
+  ASSERT_NE(l1, l4);
+
+  ASSERT_EQ(l2, l1);
+  ASSERT_EQ(l2, l2);
+  ASSERT_NE(l2, l3);
+  ASSERT_NE(l2, l4);
+
+  ASSERT_NE(l3, l1);
+  ASSERT_NE(l3, l2);
+  ASSERT_EQ(l3, l3);
+  ASSERT_NE(l3, l4);
+
+  ASSERT_NE(l4, l1);
+  ASSERT_NE(l4, l2);
+  ASSERT_NE(l4, l3);
+  ASSERT_EQ(l4, l4);
+}
+
+TEST_CASE(shouldBeAbleToCompareListsLexicographically)
+{
+  // TODO: HERE
+}
+
 int main(int argc, char* argv[])
 {
   (void)argc;
@@ -688,8 +721,12 @@ int main(int argc, char* argv[])
 
     std::cout << ">>>>> TEST SUCCESS\n";
 
+    std::size_t testCaseNumber{1};
+
     for (const std::string& functionName : successfulFunctions) {
-      std::cout << "Test case \"" << functionName << "\": SUCCESS.\n";
+      std::cout << "Test case " << testCaseNumber << " \"" << functionName
+                << "\": SUCCESS.\n";
+      ++testCaseNumber;
     }
 
     std::cout << ">>>> ALL TESTS RAN SUCCESSFULLY\n";
