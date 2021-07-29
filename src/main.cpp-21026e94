@@ -620,7 +620,7 @@ TEST_CASE(shouldBeAbleToPostfixIncrementIterators)
   ASSERT_EQ(std::next(l.begin()), it);
 
   List<int>::const_iterator cit2{cit++};
-  ASSERT_EQ(l.cbegin(), cit2);
+  ASSERT_EQ(l.cbegin(), cit);
   ASSERT_EQ(std::next(l.cbegin()), cit);
 }
 
