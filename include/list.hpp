@@ -25,6 +25,8 @@ public:
 
   class iterator {
   public:
+    friend class this_type;
+
     explicit iterator(Node* node) : m_node{node} {}
 
     friend bool operator==(const iterator& lhs, const iterator& rhs)
@@ -71,6 +73,8 @@ public:
 
   class const_iterator {
   public:
+    friend class this_type;
+
     explicit const_iterator(iterator it) : m_it{it} {}
 
     friend bool operator==(const iterator& lhs, const iterator& rhs)
@@ -127,14 +131,8 @@ public:
 
   this_type& operator=(const this_type& other)
   {
-    destroy();
-    m_size  = 0;
-    m_begin = nullptr;
-    m_end   = nullptr;
-    initialize();
-
-    for (const value_type& element : other) { push_back(element); }
-
+    this_type newList{other};
+    swap(newList);
     return *this;
   }
 
@@ -143,6 +141,17 @@ public:
   size_type size() const { return m_size; }
 
   [[nodiscard]] bool empty() const { return size() == 0; }
+
+  reference front() { return *begin(); }
+
+  const_reference front() const
+  {
+    return const_cast<this_type*>(this)->front();
+  }
+
+  reference back() { return *rbegin(); }
+
+  const_reference back() const { return const_cast<this_type*>(this)->back(); }
 
   iterator begin() { return iterator{m_begin}; }
 
@@ -241,6 +250,44 @@ public:
     --m_size;
   }
 
+  iterator insert(iterator pos, const_reference value)
+  {
+    Node* node{pos.m_node};
+    Node* prev{node->prev};
+    Node* newNode{nullptr};
+
+    try {
+      newNode = new Node{value, prev, node};
+    }
+    catch (...) {
+      delete newNode;
+      throw;
+    }
+
+    if (empty()) { m_begin = newNode; }
+    else {
+      prev->next = newNode;
+    }
+
+    node->prev = newNode;
+    ++m_size;
+
+    return iterator{newNode};
+  }
+
+  void clear()
+  {
+    destroy();
+    initialize();
+  }
+
+  void swap(this_type& other) noexcept
+  {
+    std::swap(m_begin, other.m_begin);
+    std::swap(m_end, other.m_end);
+    std::swap(m_size, other.m_size);
+  }
+
 private:
   void addFirstNode(const_reference element)
   {
@@ -281,9 +328,19 @@ private:
     }
 
     delete m_end;
+
+    m_begin = nullptr;
+    m_end   = nullptr;
+    m_size  = 0;
   }
 
   Node*     m_begin;
   Node*     m_end;
   size_type m_size;
 };
+
+template<typename Ty>
+void swap(List<Ty>& lhs, List<Ty>& rhs) noexcept
+{
+  lhs.swap(rhs);
+}
