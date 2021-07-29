@@ -358,8 +358,8 @@ public:
       newed.insert(newNode);
     }
     catch (...) {
-      delete newNode;
       deleted.insert(newNode);
+      delete newNode;
       throw;
     }
 
@@ -390,8 +390,8 @@ public:
     }
 
     --m_size;
-    delete node;
     deleted.insert(node);
+    delete node;
     return iterator{next};
   }
 
@@ -452,9 +452,9 @@ private:
       m_end = m_begin;
     }
     catch (...) {
+      deleted.insert(m_begin);
       delete m_begin;
       m_begin = nullptr;
-      deleted.insert(m_begin);
       throw;
     }
   }
@@ -465,12 +465,12 @@ private:
 
     while (node != m_end) {
       node = node->next;
-      delete node->prev;
       deleted.insert(node->prev);
+      delete node->prev;
     }
 
-    delete m_end;
     deleted.insert(m_end);
+    delete m_end;
 
     m_begin = nullptr;
     m_end   = nullptr;
