@@ -601,7 +601,6 @@ TEST_CASE(shouldBeAbleToPrintIterators)
   const bool beginsWith2{std::equal(
     expectedStart2.begin(),
     expectedStart2.end(),
-    str2.begin(),
     str2.begin() + expectedStart2.size())};
 
   ASSERT_EQ(true, beginsWith1);
