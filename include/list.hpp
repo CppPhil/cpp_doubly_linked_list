@@ -250,9 +250,9 @@ public:
     --m_size;
   }
 
-  iterator insert(iterator pos, const_reference value)
+  iterator insert(const_iterator pos, const_reference value)
   {
-    Node* node{pos.m_node};
+    Node* node{pos.m_it.m_node};
     Node* prev{node->prev};
     Node* newNode{nullptr};
 
@@ -264,7 +264,7 @@ public:
       throw;
     }
 
-    if (empty()) { m_begin = newNode; }
+    if (node == m_begin) { m_begin = newNode; }
     else {
       prev->next = newNode;
     }
@@ -273,6 +273,22 @@ public:
     ++m_size;
 
     return iterator{newNode};
+  }
+
+  iterator erase(const_iterator pos)
+  {
+    Node* node{pos.m_it.m_node};
+
+    if (node == m_begin) {
+      m_begin          = node->next;
+      node->next->prev = nullptr;
+    }
+    else {
+      node->prev->next = node->next;
+      node->next->prev = node->prev;
+    }
+
+    delete node;
   }
 
   void clear()
