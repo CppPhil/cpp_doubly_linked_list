@@ -172,6 +172,12 @@ TEST_CASE(shouldBeAbleToQuerySize)
   ASSERT_EQ(13, l.size());
 }
 
+TEST_CASE(shouldNotConsiderANonEmptyListEmpty)
+{
+  const List<int> l{makeTestList()};
+  ASSERT_EQ(false, l.empty());
+}
+
 int main()
 {
   try {
