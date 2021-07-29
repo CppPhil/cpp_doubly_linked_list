@@ -14,11 +14,6 @@
 extern std::unordered_set<void*> newed;
 extern std::unordered_set<void*> deleted;
 
-// TODO: Check for memory leaks
-// TODO: Write tests.
-
-// TODO: Test comparison operators.
-
 template<typename Ty>
 class List {
 public:

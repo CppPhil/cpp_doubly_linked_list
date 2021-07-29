@@ -751,7 +751,26 @@ TEST_CASE(shouldBeAbleToCompareListsLexicographically)
     ASSERT_EQ(true, l1 <= l2);
   }
 
-  // TODO: Test >= operator.
+  // >= with longer list
+  {
+    List<int> l1{1, 2};
+    List<int> l2{1, 2, 3};
+    ASSERT_EQ(true, l2 >= l1);
+  }
+
+  // >= with greater lest
+  {
+    List<int> l1{1, 2, 4};
+    List<int> l2{1, 2, 3};
+    ASSERT_EQ(true, l1 >= l2);
+  }
+
+  // >= with equal list
+  {
+    List<int> l1{1, 2, 3, 4};
+    List<int> l2{1, 2, 3, 4};
+    ASSERT_EQ(true, l1 >= l2);
+  }
 }
 
 int main(int argc, char* argv[])
