@@ -39,10 +39,13 @@ public:
   using reference       = value_type&;
   using const_reference = const value_type&;
 
+  class const_iterator;
+
+  friend std::ostream& operator<<(std::ostream& os, const const_iterator& cit);
+
   class iterator {
   public:
     friend class List;
-    friend class List::const_iterator;
 
     using difference_type   = typename List::difference_type;
     using value_type        = std::remove_cv_t<typename List<Ty>::value_type>;
@@ -123,7 +126,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const const_iterator& cit)
     {
-      return os << "List::const_iterator{" << m_it.m_node << '}';
+      return os << "List::const_iterator{"
+                << reinterpret_cast<const Node* const&>(cit.m_it) << '}';
     }
 
     /* IMPLICIT */ const_iterator(iterator it) : m_it{it} {}

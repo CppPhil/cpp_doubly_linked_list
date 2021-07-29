@@ -564,6 +564,16 @@ TEST_CASE(shouldBeAbleToIterateBackwards)
   }
 }
 
+TEST_CASE(shouldBeAbleToCompareIterators)
+{
+  List<int> l{makeTestList()};
+
+  ASSERT_EQ(l.begin(), std::prev(l.end(), 10));
+  ASSERT_EQ(l.cbegin(), std::prev(l.cend(), 10));
+  ASSERT_NE(l.begin(), l.end());
+  ASSERT_NE(l.cbegin(), l.cend());
+}
+
 int main(int argc, char* argv[])
 {
   (void)argc;
