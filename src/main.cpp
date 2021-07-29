@@ -99,7 +99,7 @@ struct TestFunctionWithName {
 
 std::vector<TestFunctionWithName> testFunctions{};
 
-#define TEST_CASE(testName)                                                \
+#define TEST(testName)                                                     \
   NEVER_INLINE void testName();                                            \
   struct testName##Struct {                                                \
     testName##Struct()                                                     \
@@ -120,14 +120,14 @@ NEVER_INLINE List<int> makeTestList()
 
 using namespace std::string_literals;
 
-TEST_CASE(shouldBeAbleToConstructEmptyList)
+TEST(shouldBeAbleToConstructEmptyList)
 {
   List<int> l{};
   ASSERT_EQ(true, l.empty());
   ASSERT_EQ(0, l.size());
 }
 
-TEST_CASE(shouldBeAbleToCopyConstructAList)
+TEST(shouldBeAbleToCopyConstructAList)
 {
   const List<int> l1{makeTestList()};
   const List<int> l2{l1};
@@ -147,7 +147,7 @@ TEST_CASE(shouldBeAbleToCopyConstructAList)
   }
 }
 
-TEST_CASE(shouldBeAbleToCreateListFromInitializerList)
+TEST(shouldBeAbleToCreateListFromInitializerList)
 {
   const List<int> l{1, 2, 3};
   ASSERT_EQ(3, l.size());
@@ -156,7 +156,7 @@ TEST_CASE(shouldBeAbleToCreateListFromInitializerList)
   ASSERT_EQ(3, l[2]);
 }
 
-TEST_CASE(shouldBeAbleToCopyAssign)
+TEST(shouldBeAbleToCopyAssign)
 {
   const List<int> l1{makeTestList()};
   List<int>       l2{};
@@ -182,7 +182,7 @@ TEST_CASE(shouldBeAbleToCopyAssign)
   }
 }
 
-TEST_CASE(shouldBeAbleToQuerySize)
+TEST(shouldBeAbleToQuerySize)
 {
   List<int> l{makeTestList()};
   l.push_back(1);
@@ -193,19 +193,19 @@ TEST_CASE(shouldBeAbleToQuerySize)
   ASSERT_EQ(13, l.size());
 }
 
-TEST_CASE(shouldNotConsiderANonEmptyListEmpty)
+TEST(shouldNotConsiderANonEmptyListEmpty)
 {
   const List<int> l{makeTestList()};
   ASSERT_EQ(false, l.empty());
 }
 
-TEST_CASE(shouldBeAbleToGetFirstElement)
+TEST(shouldBeAbleToGetFirstElement)
 {
   const List<int> l{makeTestList()};
   ASSERT_EQ(0, l.front());
 }
 
-TEST_CASE(shouldThrowWhenFrontIsCalledOnEmptyList)
+TEST(shouldThrowWhenFrontIsCalledOnEmptyList)
 {
   const List<int> emptyList{};
 
@@ -218,13 +218,13 @@ TEST_CASE(shouldThrowWhenFrontIsCalledOnEmptyList)
   }
 }
 
-TEST_CASE(shouldBeAbleToGetLastElement)
+TEST(shouldBeAbleToGetLastElement)
 {
   const List<int> l{makeTestList()};
   ASSERT_EQ(9, l.back());
 }
 
-TEST_CASE(shouldThrowWhenFetchingTheLastElementFromAnEmptyList)
+TEST(shouldThrowWhenFetchingTheLastElementFromAnEmptyList)
 {
   const List<int> emptyList{};
 
@@ -237,14 +237,14 @@ TEST_CASE(shouldThrowWhenFetchingTheLastElementFromAnEmptyList)
   }
 }
 
-TEST_CASE(shouldBeAbleToAccessElementsByIndex)
+TEST(shouldBeAbleToAccessElementsByIndex)
 {
   const List<int> l{makeTestList()};
 
   for (std::size_t i{0}; i < l.size(); ++i) { ASSERT_EQ(i, l[i]); }
 }
 
-TEST_CASE(shouldThrowAnExceptionWhenIndexIsOutOfBounds)
+TEST(shouldThrowAnExceptionWhenIndexIsOutOfBounds)
 {
   const List<int> l{makeTestList()};
 
@@ -270,7 +270,7 @@ TEST_CASE(shouldThrowAnExceptionWhenIndexIsOutOfBounds)
   }
 }
 
-TEST_CASE(shouldBeAbleToSort)
+TEST(shouldBeAbleToSort)
 {
   List<int> l{};
   l.push_back(5);
@@ -285,7 +285,7 @@ TEST_CASE(shouldBeAbleToSort)
   ASSERT_EQ(expected, l);
 }
 
-TEST_CASE(shouldBeAbleToSortInDescendingOrder)
+TEST(shouldBeAbleToSortInDescendingOrder)
 {
   List<int>       l{1, 2, 3, 7, 9, 1, 4, 8, 1, 2, -1};
   const List<int> expected{9, 8, 7, 4, 3, 2, 2, 1, 1, 1, -1};
@@ -293,7 +293,7 @@ TEST_CASE(shouldBeAbleToSortInDescendingOrder)
   ASSERT_EQ(expected, l);
 }
 
-TEST_CASE(shouldBeAbleToAddElementsToTheBack)
+TEST(shouldBeAbleToAddElementsToTheBack)
 {
   List<int> l{};
 
@@ -309,7 +309,7 @@ TEST_CASE(shouldBeAbleToAddElementsToTheBack)
   for (int i{0}; i < 20; ++i, ++it) { ASSERT_EQ(i, *it); }
 }
 
-TEST_CASE(shouldBeAbleToAddElementsToTheFront)
+TEST(shouldBeAbleToAddElementsToTheFront)
 {
   List<int> l{};
 
@@ -325,7 +325,7 @@ TEST_CASE(shouldBeAbleToAddElementsToTheFront)
   for (int i{0}; i < 20; ++i, ++it) { ASSERT_EQ(19 - i, *it); }
 }
 
-TEST_CASE(shouldBeAbleToRemoveElementsFromTheBack)
+TEST(shouldBeAbleToRemoveElementsFromTheBack)
 {
   List<int> l{makeTestList()};
   l.pop_back();
@@ -342,7 +342,7 @@ TEST_CASE(shouldBeAbleToRemoveElementsFromTheBack)
   ASSERT_EQ(true, l2.empty());
 }
 
-TEST_CASE(shouldBeAbleToRemoveElementsFromTheFront)
+TEST(shouldBeAbleToRemoveElementsFromTheFront)
 {
   List<int> l{makeTestList()};
   l.pop_front();
@@ -359,7 +359,7 @@ TEST_CASE(shouldBeAbleToRemoveElementsFromTheFront)
   ASSERT_EQ(true, l2.empty());
 }
 
-TEST_CASE(shouldBeAbleToInsertAtTheFront)
+TEST(shouldBeAbleToInsertAtTheFront)
 {
   List<int>  l{makeTestList()};
   const auto it{l.insert(l.begin(), 99)};
@@ -368,7 +368,7 @@ TEST_CASE(shouldBeAbleToInsertAtTheFront)
   ASSERT_EQ((List<int>{99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}), l);
 }
 
-TEST_CASE(shouldBeAbleToInsertAtTheFrontUsingAnEmptyList)
+TEST(shouldBeAbleToInsertAtTheFrontUsingAnEmptyList)
 {
   List<int>  l{};
   const auto it{l.insert(l.begin(), 5)};
@@ -377,7 +377,7 @@ TEST_CASE(shouldBeAbleToInsertAtTheFrontUsingAnEmptyList)
   ASSERT_EQ(5, l[0]);
 }
 
-TEST_CASE(shouldBeAbleToInsertInTheMiddle)
+TEST(shouldBeAbleToInsertInTheMiddle)
 {
   List<int>  l{makeTestList()};
   const auto it{l.insert(std::next(l.begin(), 3), 999)};
@@ -386,7 +386,7 @@ TEST_CASE(shouldBeAbleToInsertInTheMiddle)
   ASSERT_EQ((List<int>{0, 1, 2, 999, 3, 4, 5, 6, 7, 8, 9}), l);
 }
 
-TEST_CASE(shouldBeAbleToInsertAtTheEnd)
+TEST(shouldBeAbleToInsertAtTheEnd)
 {
   List<int>  l{makeTestList()};
   const auto it{l.insert(l.end(), 123)};
@@ -395,7 +395,7 @@ TEST_CASE(shouldBeAbleToInsertAtTheEnd)
   ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 123}), l);
 }
 
-TEST_CASE(shouldBeAbleToInsertAtTheEndUsingAnEmptyList)
+TEST(shouldBeAbleToInsertAtTheEndUsingAnEmptyList)
 {
   List<int>  l{};
   const auto it{l.insert(l.end(), 1)};
@@ -404,7 +404,7 @@ TEST_CASE(shouldBeAbleToInsertAtTheEndUsingAnEmptyList)
   ASSERT_EQ(1, l.front());
 }
 
-TEST_CASE(shouldBeAbleToEraseAtTheFront)
+TEST(shouldBeAbleToEraseAtTheFront)
 {
   List<int>  l{makeTestList()};
   const auto it{l.erase(l.begin())};
@@ -414,7 +414,7 @@ TEST_CASE(shouldBeAbleToEraseAtTheFront)
   ASSERT_EQ((List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9}), l);
 }
 
-TEST_CASE(shouldBeAbleToEraseAtTheEnd)
+TEST(shouldBeAbleToEraseAtTheEnd)
 {
   List<int>  l{makeTestList()};
   const auto it{l.erase(std::prev(l.end()))};
@@ -424,7 +424,7 @@ TEST_CASE(shouldBeAbleToEraseAtTheEnd)
   ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8}), l);
 }
 
-TEST_CASE(shouldBeAbleToEraseInTheMiddle)
+TEST(shouldBeAbleToEraseInTheMiddle)
 {
   List<int>  l{makeTestList()};
   const auto it{l.erase(std::next(l.begin(), 5))};
@@ -434,7 +434,7 @@ TEST_CASE(shouldBeAbleToEraseInTheMiddle)
   ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 6, 7, 8, 9}), l);
 }
 
-TEST_CASE(shouldBeAbleToRemoveElements)
+TEST(shouldBeAbleToRemoveElements)
 {
   List<int> l{1, 2, 3, 2, 3, 4, 5, 6, 2, 7, 8, 9, 2, 1, 2};
   l.remove(2);
@@ -442,7 +442,7 @@ TEST_CASE(shouldBeAbleToRemoveElements)
   ASSERT_EQ((List<int>{1, 3, 3, 4, 5, 6, 7, 8, 9, 1}), l);
 }
 
-TEST_CASE(shouldBeAbleToRemoveElementsByPredicate)
+TEST(shouldBeAbleToRemoveElementsByPredicate)
 {
   List<std::string> l{
     "test",
@@ -458,7 +458,7 @@ TEST_CASE(shouldBeAbleToRemoveElementsByPredicate)
   ASSERT_EQ((List<std::string>{"test", "text", "hi", "abc"}), l);
 }
 
-TEST_CASE(shouldBeAbleToGrowUsingResize)
+TEST(shouldBeAbleToGrowUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(12);
@@ -466,7 +466,7 @@ TEST_CASE(shouldBeAbleToGrowUsingResize)
   ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 0}), l);
 }
 
-TEST_CASE(shouldBeAbleToGrowFromAnEmptyListUsingResize)
+TEST(shouldBeAbleToGrowFromAnEmptyListUsingResize)
 {
   List<int> l{};
   l.resize(3);
@@ -475,7 +475,7 @@ TEST_CASE(shouldBeAbleToGrowFromAnEmptyListUsingResize)
   ASSERT_EQ(true, std::equal(l.begin(), l.end(), std::begin(a), std::end(a)));
 }
 
-TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
+TEST(shouldDoNothingWhenResizingToTheSameSize)
 {
   List<int>       l{makeTestList()};
   const List<int> copy{l};
@@ -485,7 +485,7 @@ TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
   ASSERT_EQ(copy, l);
 }
 
-TEST_CASE(shouldBeAbleShrinkUsingResize)
+TEST(shouldBeAbleShrinkUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(4);
@@ -496,7 +496,7 @@ TEST_CASE(shouldBeAbleShrinkUsingResize)
   ASSERT_EQ(3, l[3]);
 }
 
-TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize)
+TEST(shouldBeAbleToShrinkToTheEmptyListUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(0);
@@ -505,7 +505,7 @@ TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize)
   ASSERT_EQ(List<int>{}, l);
 }
 
-TEST_CASE(shouldBeAbleToClear)
+TEST(shouldBeAbleToClear)
 {
   List<int> l{makeTestList()};
   l.clear();
@@ -514,7 +514,7 @@ TEST_CASE(shouldBeAbleToClear)
   ASSERT_EQ(List<int>{}, l);
 }
 
-TEST_CASE(shouldDoNothingWhenClearingAnEmptyList)
+TEST(shouldDoNothingWhenClearingAnEmptyList)
 {
   List<int> l{};
   l.clear();
@@ -523,7 +523,7 @@ TEST_CASE(shouldDoNothingWhenClearingAnEmptyList)
   ASSERT_EQ(List<int>{}, l);
 }
 
-TEST_CASE(shouldBeAbleToSwapLists)
+TEST(shouldBeAbleToSwapLists)
 {
   List<int> l1{1, 2, 3, 4};
   List<int> l2{makeTestList()};
@@ -536,7 +536,7 @@ TEST_CASE(shouldBeAbleToSwapLists)
   ASSERT_EQ((List<int>{1, 2, 3, 4}), l2);
 }
 
-TEST_CASE(shouldBeAbleToIterate)
+TEST(shouldBeAbleToIterate)
 {
   const List<int> l{makeTestList()};
 
@@ -550,7 +550,7 @@ TEST_CASE(shouldBeAbleToIterate)
   }
 }
 
-TEST_CASE(shouldBeAbleToIterateBackwards)
+TEST(shouldBeAbleToIterateBackwards)
 {
   const List<int> l{makeTestList()};
 
@@ -564,7 +564,7 @@ TEST_CASE(shouldBeAbleToIterateBackwards)
   }
 }
 
-TEST_CASE(shouldBeAbleToCompareIterators)
+TEST(shouldBeAbleToCompareIterators)
 {
   List<int> l{makeTestList()};
 
@@ -574,7 +574,7 @@ TEST_CASE(shouldBeAbleToCompareIterators)
   ASSERT_NE(l.cbegin(), l.cend());
 }
 
-TEST_CASE(shouldBeAbleToPrintIterators)
+TEST(shouldBeAbleToPrintIterators)
 {
   std::ostringstream oss1{};
   std::ostringstream oss2{};
@@ -608,7 +608,7 @@ TEST_CASE(shouldBeAbleToPrintIterators)
   ASSERT_EQ(true, beginsWith2);
 }
 
-TEST_CASE(shouldBeAbleToPostfixIncrementIterators)
+TEST(shouldBeAbleToPostfixIncrementIterators)
 {
   List<int> l{makeTestList()};
 
@@ -624,7 +624,7 @@ TEST_CASE(shouldBeAbleToPostfixIncrementIterators)
   ASSERT_EQ(std::next(l.cbegin()), cit);
 }
 
-TEST_CASE(shouldBeAbleToPrefixDecrementIterators)
+TEST(shouldBeAbleToPrefixDecrementIterators)
 {
   List<int> l{makeTestList()};
 
@@ -644,7 +644,7 @@ TEST_CASE(shouldBeAbleToPrefixDecrementIterators)
   ASSERT_EQ(lastElemCit, cit2);
 }
 
-TEST_CASE(shouldBeAbleToPostfixDecrementIterators)
+TEST(shouldBeAbleToPostfixDecrementIterators)
 {
   List<int> l{makeTestList()};
 
@@ -664,7 +664,7 @@ TEST_CASE(shouldBeAbleToPostfixDecrementIterators)
   ASSERT_EQ(l.cend(), cit2);
 }
 
-TEST_CASE(shouldBeAbleToPrintAList)
+TEST(shouldBeAbleToPrintAList)
 {
   const List<int>    l{makeTestList()};
   std::ostringstream oss{};
@@ -678,7 +678,7 @@ TEST_CASE(shouldBeAbleToPrintAList)
   ASSERT_EQ("List[]", oss2.str());
 }
 
-TEST_CASE(shouldBeAbleToCompareListsForEquality)
+TEST(shouldBeAbleToCompareListsForEquality)
 {
   const List<int> l1{makeTestList()};
   const List<int> l2{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -706,7 +706,7 @@ TEST_CASE(shouldBeAbleToCompareListsForEquality)
   ASSERT_EQ(l4, l4);
 }
 
-TEST_CASE(shouldBeAbleToCompareListsLexicographically)
+TEST(shouldBeAbleToCompareListsLexicographically)
 {
   // a shorter list should come before a larger one
   {

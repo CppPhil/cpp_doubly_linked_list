@@ -453,6 +453,7 @@ private:
     }
     catch (...) {
       delete m_begin;
+      m_begin = nullptr;
       deleted.insert(m_begin);
       throw;
     }
