@@ -7,6 +7,7 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 
 extern std::unordered_set<void*> newed;
 extern std::unordered_set<void*> deleted;
@@ -32,12 +33,19 @@ private:
 public:
   using this_type       = List;
   using size_type       = std::size_t;
+  using difference_type = std::ptrdiff_t;
   using reference       = value_type&;
   using const_reference = const value_type&;
 
   class iterator {
   public:
-    friend class this_type;
+    friend class List;
+    using difference_type   = typename List::difference_type;
+    using value_type        = std::remove_cv_t<typename List<Ty>::value_type>;
+    using pointer           = value_type*;
+    using reference         = value_type&;
+    using iterator_category = std::bidirectional_iterator_tag;
+    using iterator_concept  = std::bidirectional_iterator_tag; // C++20
 
     /* IMPLICIT */ iterator(Node* node) : m_node{node} {}
 
@@ -85,7 +93,13 @@ public:
 
   class const_iterator {
   public:
-    friend class this_type;
+    friend class List;
+    using difference_type   = typename List::difference_type;
+    using value_type        = std::remove_cv_t<typename List<Ty>::value_type>;
+    using pointer           = const value_type*;
+    using reference         = const value_type&;
+    using iterator_category = std::bidirectional_iterator_tag;
+    using iterator_concept  = std::bidirectional_iterator_tag; // C++20
 
     /* IMPLICIT */ const_iterator(iterator it) : m_it{it} {}
 
