@@ -118,15 +118,20 @@ public:
   using reverse_iterator       = std::reverse_iterator<iterator>;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-  List() : m_begin{nullptr}, m_end{m_begin}, m_size{0}
+  List() : m_begin{nullptr}, m_end{nullptr}, m_size{0}
   {
     try {
-      m_begin = new Node { value_type{}, nullptr, nullptr }
+      m_begin = new Node{value_type{}, nullptr, nullptr} m_end = m_begin;
     }
     catch (...) {
       delete m_begin;
       throw;
     }
+  }
+
+  List(const this_type& other) : List{}
+  {
+    for (const value_type& element : other) { push_back(element); }
   }
 
   ~List()
