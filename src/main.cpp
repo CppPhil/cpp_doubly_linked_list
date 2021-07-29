@@ -475,9 +475,9 @@ TEST_CASE(shouldBeAbleToGrowFromAnEmptyListUsingResize)
   ASSERT_EQ(true, std::equal(l.begin(), l.end(), std::begin(a), std::end(a)));
 }
 
-TEST_CASE(shouldDoNothingWhenResizingToTheSameSize) 
+TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
 {
-  List<int> l{makeTestList()};
+  List<int>       l{makeTestList()};
   const List<int> copy{l};
   l.resize(10);
   ASSERT_EQ(10, l.size());
@@ -485,7 +485,7 @@ TEST_CASE(shouldDoNothingWhenResizingToTheSameSize)
   ASSERT_EQ(copy, l);
 }
 
-TEST_CASE(shouldBeAbleShrinkUsingResize) 
+TEST_CASE(shouldBeAbleShrinkUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(4);
@@ -496,7 +496,7 @@ TEST_CASE(shouldBeAbleShrinkUsingResize)
   ASSERT_EQ(3, l[3]);
 }
 
-TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize) 
+TEST_CASE(shouldBeAbleToShrinkToTheEmptyListUsingResize)
 {
   List<int> l{makeTestList()};
   l.resize(0);
@@ -534,6 +534,34 @@ TEST_CASE(shouldBeAbleToSwapLists)
 
   ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}), l1);
   ASSERT_EQ((List<int>{1, 2, 3, 4}), l2);
+}
+
+TEST_CASE(shouldBeAbleToIterate)
+{
+  const List<int> l{makeTestList()};
+
+  int                       counter{0};
+  List<int>::const_iterator it{l.begin()};
+
+  while (it != l.end()) {
+    ASSERT_EQ(counter, *it);
+    ++it;
+    ++counter;
+  }
+}
+
+TEST_CASE(shouldBeAbleToIterateBackwards)
+{
+  const List<int> l{makeTestList()};
+
+  int                               counter{9};
+  List<int>::const_reverse_iterator it{l.rbegin()};
+
+  while (it != l.rend()) {
+    ASSERT_EQ(counter, *it);
+    ++it;
+    --counter;
+  }
 }
 
 int main(int argc, char* argv[])
