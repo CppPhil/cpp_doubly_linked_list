@@ -1,14 +1,16 @@
-#pragma once
+#ifndef INCG_LIST_HPP
+#define INCG_LIST_HPP
 #include <cstddef>
 
 #include <algorithm>
 #include <functional>
 #include <iterator>
 
+extern std::unordered_set<void*> newed;
+extern std::unordered_set<void*> deleted;
+
 // TODO: Check for memory leaks
 // TODO: Write tests.
-
-// TODO: Implement simplifications.
 template<typename Ty>
 class List {
 public:
@@ -31,7 +33,7 @@ public:
   public:
     friend class this_type;
 
-    explicit iterator(Node* node) : m_node{node} {}
+    /* IMPLICIT */ iterator(Node* node) : m_node{node} {}
 
     friend bool operator==(const iterator& lhs, const iterator& rhs)
     {
@@ -79,14 +81,14 @@ public:
   public:
     friend class this_type;
 
-    explicit const_iterator(iterator it) : m_it{it} {}
+    /* IMPLICIT */ const_iterator(iterator it) : m_it{it} {}
 
-    friend bool operator==(const iterator& lhs, const iterator& rhs)
+    friend bool operator==(const const_iterator& lhs, const const_iterator& rhs)
     {
       return lhs.m_it == rhs.m_it;
     }
 
-    friend bool operator!=(const iterator& lhs, const iterator& rhs)
+    friend bool operator!=(const const_iterator& lhs, const const_iterator& rhs)
     {
       return !(lhs == rhs);
     }
@@ -208,48 +210,9 @@ public:
     }
   }
 
-  void push_back(const_reference element)
-  {
-    if (empty()) {
-      addFirstNode(element);
-      return;
-    }
+  void push_back(const_reference element) { insert(end(), element); }
 
-    Node* newNode{nullptr};
-
-    try {
-      newNode = new Node{element, m_end->prev, m_end};
-    }
-    catch (...) {
-      delete newNode;
-      throw;
-    }
-
-    m_end->prev->next = newNode;
-    m_end->prev       = newNode;
-    ++m_size;
-  }
-
-  void push_front(const_reference element)
-  {
-    if (empty()) {
-      addFirstNode(element);
-      return;
-    }
-
-    Node* newNode{nullptr};
-
-    try {
-      newNode = new Node{element, nullptr, m_begin};
-    }
-    catch (...) {
-      delete newNode;
-      throw;
-    }
-
-    m_begin = newNode;
-    ++m_size;
-  }
+  void push_front(const_reference element) { insert(begin(), element); }
 
   void pop_back()
   {
@@ -273,9 +236,11 @@ public:
 
     try {
       newNode = new Node{value, prev, node};
+      newed.insert(newNode);
     }
     catch (...) {
       delete newNode;
+      deleted.insert(newNode);
       throw;
     }
 
@@ -287,7 +252,8 @@ public:
     node->prev = newNode;
     ++m_size;
 
-    return iterator{newNode};
+    iterator it{newNode};
+    return it;
   }
 
   iterator erase(const_iterator pos)
@@ -306,6 +272,7 @@ public:
 
     --m_size;
     delete node;
+    deleted.insert(node);
     return iterator{next};
   }
 
@@ -358,31 +325,16 @@ public:
   }
 
 private:
-  void addFirstNode(const_reference element)
-  {
-    Node* newNode{nullptr};
-
-    try {
-      newNode = new Node{element, nullptr, m_end};
-    }
-    catch (...) {
-      delete newNode;
-      throw;
-    }
-
-    m_begin     = newNode;
-    m_end->prev = m_begin;
-    ++m_size;
-  }
-
   void initialize()
   {
     try {
       m_begin = new Node{value_type{}, nullptr, nullptr};
-      m_end   = m_begin;
+      newed.insert(m_begin);
+      m_end = m_begin;
     }
     catch (...) {
       delete m_begin;
+      deleted.insert(m_begin);
       throw;
     }
   }
@@ -394,9 +346,11 @@ private:
     while (node != m_end) {
       node = node->next;
       delete node->prev;
+      deleted.insert(node->prev);
     }
 
     delete m_end;
+    deleted.insert(m_end);
 
     m_begin = nullptr;
     m_end   = nullptr;
@@ -413,3 +367,4 @@ void swap(List<Ty>& lhs, List<Ty>& rhs) noexcept
 {
   lhs.swap(rhs);
 }
+#endif // INCG_LIST_HPP
