@@ -1,5 +1,4 @@
 #include <cstdint>
-#include <cstdlib>
 
 #include <algorithm>
 #include <iostream>
@@ -421,7 +420,7 @@ TEST_CASE(shouldBeAbleToEraseAtTheEnd)
   ASSERT_EQ(l.end(), it);
   ASSERT_EQ(9, l.size());
   ASSERT_EQ(8, l.back());
-  ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8}), l);
+  ASSERT_EQ((List<int>{1, 2, 3, 4, 5, 6, 7, 8}), l);
 }
 
 TEST_CASE(shouldBeAbleToEraseInTheMiddle)
@@ -431,14 +430,11 @@ TEST_CASE(shouldBeAbleToEraseInTheMiddle)
   ASSERT_EQ(6, *it);
   ASSERT_EQ(9, l.size());
   ASSERT_EQ(6, l[5]);
-  ASSERT_EQ((List<int>{0, 1, 2, 3, 4, 6, 7, 8, 9}), l);
+  ASSERT_EQ((List<int>{1, 2, 3, 4, 6, 7, 8, 9}), l);
 }
 
-int main(int argc, char* argv[])
+int main()
 {
-  (void)argc;
-  int exitStatus{EXIT_SUCCESS};
-
   try {
     std::vector<std::string> successfulFunctions{};
 
@@ -460,8 +456,6 @@ int main(int argc, char* argv[])
 
     std::cerr << "\n\n\n";
     std::cerr << ">>>>>>> TEST FAILURE!!!! <<<<\n";
-
-    exitStatus |= EXIT_FAILURE;
   }
 
   std::vector<void*> leaks{};
@@ -478,12 +472,8 @@ int main(int argc, char* argv[])
 
   if (leaks.empty()) { std::cout << "No memory leaks found\n"; }
   else {
-    exitStatus |= EXIT_FAILURE;
     std::cerr << leaks.size() << " memory leaks found.\n";
 
     for (void* addr : leaks) { std::cerr << addr << '\n'; }
   }
-
-  std::cout << argv[0] << ": exiting with code " << exitStatus << '\n';
-  return exitStatus;
 }

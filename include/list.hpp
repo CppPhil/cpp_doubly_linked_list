@@ -42,14 +42,14 @@ public:
   class iterator {
   public:
     friend class List;
+    friend class List::const_iterator;
+
     using difference_type   = typename List::difference_type;
     using value_type        = std::remove_cv_t<typename List<Ty>::value_type>;
     using pointer           = value_type*;
     using reference         = value_type&;
     using iterator_category = std::bidirectional_iterator_tag;
     using iterator_concept  = std::bidirectional_iterator_tag; // C++20
-
-    /* IMPLICIT */ iterator(Node* node) : m_node{node} {}
 
     friend bool operator==(const iterator& lhs, const iterator& rhs)
     {
@@ -60,6 +60,13 @@ public:
     {
       return !(lhs == rhs);
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const iterator& it)
+    {
+      return os << "List::iterator{" << it.m_node << '}';
+    }
+
+    /* IMPLICIT */ iterator(Node* node) : m_node{node} {}
 
     value_type& operator*() const { return m_node->value; }
 
@@ -96,14 +103,13 @@ public:
   class const_iterator {
   public:
     friend class List;
+
     using difference_type   = typename List::difference_type;
     using value_type        = std::remove_cv_t<typename List<Ty>::value_type>;
     using pointer           = const value_type*;
     using reference         = const value_type&;
     using iterator_category = std::bidirectional_iterator_tag;
     using iterator_concept  = std::bidirectional_iterator_tag; // C++20
-
-    /* IMPLICIT */ const_iterator(iterator it) : m_it{it} {}
 
     friend bool operator==(const const_iterator& lhs, const const_iterator& rhs)
     {
@@ -114,6 +120,13 @@ public:
     {
       return !(lhs == rhs);
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const const_iterator& cit)
+    {
+      return os << "List::const_iterator{" << m_it.m_node << '}';
+    }
+
+    /* IMPLICIT */ const_iterator(iterator it) : m_it{it} {}
 
     const value_type& operator*() const { return *m_it; }
 
