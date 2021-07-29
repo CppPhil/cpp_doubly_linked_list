@@ -1,11 +1,14 @@
 #pragma once
 #include <cstddef>
 
+#include <algorithm>
 #include <functional>
 #include <iterator>
 
 // TODO: Check for memory leaks
 // TODO: Make it be more like std::list
+
+// TODO: Implement simplifications.
 template<typename Ty>
 class List {
 public:
@@ -123,6 +126,12 @@ public:
   using reverse_iterator       = std::reverse_iterator<iterator>;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
+  friend auto operator<=>(const this_type& lhs, const this_type& rhs)
+  {
+    return std::lexicographical_compare_three_way(
+      lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+  }
+
   List() : m_begin{nullptr}, m_end{nullptr}, m_size{0} { initialize(); }
 
   List(const this_type& other) : List{}
@@ -216,7 +225,7 @@ public:
     Node* newNode{nullptr};
 
     try {
-      newNode = new Node { element, nullptr, m_begin }
+      newNode = new Node{element, nullptr, m_begin};
     }
     catch (...) {
       delete newNode;
