@@ -90,22 +90,13 @@ std::string toString(const Ty& any)
   MACRO_END
 
 using TestFunction = void (*)();
+std::vector<TestFunction> testFunctions{};
 
-struct TestFunctionWithName {
-  TestFunction function;
-  std::string  name;
-};
-
-std::vector<TestFunctionWithName> testFunctions{};
-
-#define TEST_CASE(testName)                                                \
-  NEVER_INLINE void testName();                                            \
-  struct testName##Struct {                                                \
-    testName##Struct()                                                     \
-    {                                                                      \
-      testFunctions.push_back(TestFunctionWithName{&testName, #testName}); \
-    }                                                                      \
-  } testName##StructInstance{};                                            \
+#define TEST_CASE(testName)                                    \
+  NEVER_INLINE void testName();                                \
+  struct testName##Struct {                                    \
+    testName##Struct() { testFunctions.push_back(&testName); } \
+  } testName##StructInstance{};                                \
   NEVER_INLINE void testName()
 
 NEVER_INLINE List<int> makeTestList()
@@ -230,20 +221,9 @@ TEST_CASE(shouldThrowWhenFetchingTheLastElementFromAnEmptyList)
 int main()
 {
   try {
-    std::vector<std::string> successfulFunctions{};
-
-    for (const auto& [func, name] : testFunctions) {
-      func();
-      successfulFunctions.push_back(name);
-    }
+    for (TestFunction testFunction : testFunctions) { testFunction(); }
 
     std::cout << ">>>>> TEST SUCCESS\n";
-
-    for (const std::string& functionName : successfulFunctions) {
-      std::cout << "Test case \"" << functionName << "\": SUCCESS.\n";
-    }
-
-    std::cout << ">>>> ALL TESTS RAN SUCCESSFULLY\n";
   }
   catch (const AssertionViolationException& ex) {
     std::cerr << ex.what();
@@ -261,8 +241,6 @@ int main()
   }
 
   std::sort(leaks.begin(), leaks.end());
-
-  std::cout << "\n\n     MEMORY LEAK CHECK     \n";
 
   if (leaks.empty()) { std::cout << "No memory leaks found\n"; }
   else {

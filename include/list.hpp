@@ -188,7 +188,14 @@ public:
     return const_cast<this_type*>(this)->front();
   }
 
-  reference back() { return *rbegin(); }
+  reference back()
+  {
+    if (empty()) {
+      throw std::out_of_range{"List::back called on empty list."};
+    }
+
+    return *rbegin();
+  }
 
   const_reference back() const { return const_cast<this_type*>(this)->back(); }
 
