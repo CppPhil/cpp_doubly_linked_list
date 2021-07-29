@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 
+#include <functional>
 #include <iterator>
 
 // TODO: Check for memory leaks
@@ -268,18 +269,46 @@ public:
   iterator erase(const_iterator pos)
   {
     Node* node{pos.m_it.m_node};
+    Node* next{node->next};
 
     if (node == m_begin) {
-      m_begin          = node->next;
-      node->next->prev = nullptr;
+      m_begin    = next;
+      next->prev = nullptr;
     }
     else {
-      node->prev->next = node->next;
-      node->next->prev = node->prev;
+      node->prev->next = next;
+      next->prev       = node->prev;
     }
 
     --m_size;
     delete node;
+    return iterator{next};
+  }
+
+  template<typename UnaryPredicate>
+  size_type remove_if(UnaryPredicate unaryPredicate)
+  {
+    size_type elementsRemoved{0};
+
+    iterator it{begin()};
+
+    while (it != end()) {
+      if (std::invoke(unaryPredicate, *it)) {
+        it = erase(it);
+        ++elementsRemoved;
+      }
+      else {
+        ++it;
+      }
+    }
+
+    return elementsRemoved;
+  }
+
+  size_type remove(const_reference value)
+  {
+    return remove_if(
+      [&value](const_reference element) { return element == value; });
   }
 
   void resize(size_type count, const value_type& value)
