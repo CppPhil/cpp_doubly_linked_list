@@ -1,7 +1,6 @@
 #pragma once
 #include <cstddef>
 
-// TODO: Ensure copying value_type will be exception safe.
 // TODO: Check for memory leaks
 // TODO: Make it be more like std::list
 template<typename Ty>
@@ -114,11 +113,15 @@ public:
     iterator m_it;
   };
 
-  List()
-    : m_begin{new Node{value_type{}, nullptr, nullptr}}
-    , m_end{m_begin}
-    , m_size{0}
+  List() : m_begin{nullptr}, m_end{m_begin}, m_size{0}
   {
+    try {
+      m_begin = new Node { value_type{}, nullptr, nullptr }
+    }
+    catch (...) {
+      delete m_begin;
+      throw;
+    }
   }
 
   ~List()
@@ -152,7 +155,16 @@ public:
       return;
     }
 
-    Node* newNode{new Node{element, m_end->prev, m_end}};
+    Node* newNode{nullptr};
+
+    try {
+      newNode = new Node{element, m_end->prev, m_end};
+    }
+    catch (...) {
+      delete newNode;
+      throw;
+    }
+
     m_end->prev->next = newNode;
     m_end->prev       = newNode;
     ++m_size;
@@ -165,7 +177,16 @@ public:
       return;
     }
 
-    Node* newNode{new Node{element, nullptr, m_begin}};
+    Node* newNode{nullptr};
+
+    try {
+      newNode = new Node { element, nullptr, m_begin }
+    }
+    catch (...) {
+      delete newNode;
+      throw;
+    }
+
     m_begin = newNode;
     ++m_size;
   }
@@ -179,6 +200,7 @@ public:
     prev->next  = m_end;
     m_end->prev = prev;
     delete toRemove;
+    --m_size;
   }
 
   void pop_front()
@@ -190,12 +212,23 @@ public:
     next->prev = nullptr;
     m_begin    = next;
     delete toRemove;
+    --m_size;
   }
 
 private:
   void addFirstNode(const_reference element)
   {
-    m_begin     = new Node{element, nullptr, m_end};
+    Node* newNode{nullptr};
+
+    try {
+      newNode = new Node{element, nullptr, m_end};
+    }
+    catch (...) {
+      delete newNode;
+      throw;
+    }
+
+    m_begin     = newNode;
     m_end->prev = m_begin;
     ++m_size;
   }
