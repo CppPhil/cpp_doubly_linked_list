@@ -118,33 +118,27 @@ public:
   using reverse_iterator       = std::reverse_iterator<iterator>;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-  List() : m_begin{nullptr}, m_end{nullptr}, m_size{0}
-  {
-    try {
-      m_begin = new Node{value_type{}, nullptr, nullptr} m_end = m_begin;
-    }
-    catch (...) {
-      delete m_begin;
-      throw;
-    }
-  }
+  List() : m_begin{nullptr}, m_end{nullptr}, m_size{0} { initialize(); }
 
   List(const this_type& other) : List{}
   {
     for (const value_type& element : other) { push_back(element); }
   }
 
-  ~List()
+  this_type& operator=(const this_type& other)
   {
-    Node* node{m_begin};
+    destroy();
+    m_size  = 0;
+    m_begin = nullptr;
+    m_end   = nullptr;
+    initialize();
 
-    while (node != m_end) {
-      node = node->next;
-      delete node->prev;
-    }
+    for (const value_type& element : other) { push_back(element); }
 
-    delete m_end;
+    return *this;
   }
+
+  ~List() { destroy(); }
 
   size_type size() const { return m_size; }
 
@@ -263,6 +257,30 @@ private:
     m_begin     = newNode;
     m_end->prev = m_begin;
     ++m_size;
+  }
+
+  void initialize()
+  {
+    try {
+      m_begin = new Node{value_type{}, nullptr, nullptr};
+      m_end   = m_begin;
+    }
+    catch (...) {
+      delete m_begin;
+      throw;
+    }
+  }
+
+  void destroy()
+  {
+    Node* node{m_begin};
+
+    while (node != m_end) {
+      node = node->next;
+      delete node->prev;
+    }
+
+    delete m_end;
   }
 
   Node*     m_begin;
