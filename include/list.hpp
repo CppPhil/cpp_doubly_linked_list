@@ -230,24 +230,14 @@ public:
   {
     if (empty()) { return; }
 
-    Node* toRemove{m_end->prev};
-    Node* prev{toRemove->prev};
-    prev->next  = m_end;
-    m_end->prev = prev;
-    delete toRemove;
-    --m_size;
+    erase(std::prev(end()));
   }
 
   void pop_front()
   {
     if (empty()) { return; }
 
-    Node* toRemove{m_begin};
-    Node* next{m_begin->next};
-    next->prev = nullptr;
-    m_begin    = next;
-    delete toRemove;
-    --m_size;
+    erase(begin());
   }
 
   iterator insert(const_iterator pos, const_reference value)
@@ -288,8 +278,18 @@ public:
       node->next->prev = node->prev;
     }
 
+    --m_size;
     delete node;
   }
+
+  void resize(size_type count, const value_type& value)
+  {
+    while (count > size()) { push_back(value); }
+
+    while (count < size()) { pop_back(); }
+  }
+
+  void resize(size_type count) { resize(count, value_type{}); }
 
   void clear()
   {
