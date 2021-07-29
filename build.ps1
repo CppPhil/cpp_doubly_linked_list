@@ -6,7 +6,7 @@ if (-Not (Test-Path -Path $build_dir)) {
   mkdir $build_dir
 }
 
-.\format.ps1
+.\format.ps1 | Wait-Process
 
 Set-Location $build_dir
 
